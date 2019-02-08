@@ -46,7 +46,6 @@ function drawImage(image, data) {
     let bits = "";
 
     for (let byte of encodedData) {
-        bits += String.fromCharCode(byte);
         for (let i=0; i<8; i++) {
             let bit = (byte >> i & 0x1);
             bits += bit;
@@ -55,7 +54,8 @@ function drawImage(image, data) {
         bits += " ";
     }
 
-    console.log(bits);
+    var bitsEncodedEl = document.getElementById("bits-encoded");
+    bitsEncodedEl.innerHTML = bits;
 
     ctx.putImageData(imageData, 0, 0);
 
