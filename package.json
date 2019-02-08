@@ -10,5 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "less": "^3.9.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "jquery": "^3.3.1"
   }
 }
