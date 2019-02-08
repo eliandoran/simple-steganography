@@ -58,8 +58,12 @@ function drawImage(image, data) {
 
     let bits = "";
 
-    let index = 0;
+    let index = 1;
     for (let byte of encodedData) {
+        if (index % 4 == 0) {
+            index++;
+        }
+
         for (let i=0; i<8; i++) {
             let bit = (byte >> i & 0x1);
             bits += bit;
@@ -74,9 +78,6 @@ function drawImage(image, data) {
 
         bits += " ";
     }
-
-    var numBits = index - 1;
-    console.log(`Required ${numBits}.`);
 
     var bitsEncodedEl = document.getElementById("bits-encoded");
     bitsEncodedEl.innerHTML = bits;
