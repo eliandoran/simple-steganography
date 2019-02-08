@@ -7,9 +7,23 @@
     <body>
         <div class="container">
             <div class="row">
+                <div class="col-md-12">
+                    <form id="entry-form">
+                        <div class="form-group">
+                            <label for="message">Message to encode:</label>
+                            <textarea id="message" class="form-control">The quick brown fox jumps over the lazy dog.</textarea>
+                            <small id="message-help" class="form-text">The message which will be encoded in the bits of the image.</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Encode</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-3">
                     <h3>Before</h3>
-                    
+
                     <div class="image-container">
                         <img id="source-image" />
                     </div>                    
