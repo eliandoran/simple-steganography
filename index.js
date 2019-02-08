@@ -1,3 +1,5 @@
+const pixelmatch = require("pixelmatch");
+
 function getRandomImageURL() {
     return "https://source.unsplash.com/random/800x600";
 }
@@ -36,31 +38,54 @@ function drawImage(image, data) {
     destCanvas.height = data.height;
     destCanvas.style.width = image.width + "px";
     destCanvas.style.height = image.height + "px";
+
+    var diffCanvas = document.getElementById("diff-canvas");
+    diffCanvas.width = data.width;
+    diffCanvas.height = data.height;
+    diffCanvas.style.width = image.width + "px";
+    diffCanvas.style.height = image.height + "px";
     
     var ctx = destCanvas.getContext("2d");
     ctx.drawImage(image, 0, 0);
 
-    var imageData = ctx.getImageData(0, 0, destCanvas.width, destCanvas.height);
-    var data = imageData.data;
+    var diffCtx = diffCanvas.getContext("2d");
+
+    var sourceImageData = ctx.getImageData(0, 0, destCanvas.width, destCanvas.height);
+    var destImageData = ctx.getImageData(0, 0, destCanvas.width, destCanvas.height);
+    var diffImageData = ctx.createImageData(destCanvas.width, destCanvas.height);
+
+    var data = destImageData.data;
 
     let bits = "";
 
+    let index = 0;
     for (let byte of encodedData) {
         for (let i=0; i<8; i++) {
             let bit = (byte >> i & 0x1);
             bits += bit;
 
-            let colorByte = data[i];
+            let colorByte = data[index];
             let colorByteAltered = (colorByte & 0xFE) | bit;
-            console.log(colorByte + " " + colorByteAltered);
+            data[index] = 0;
+            console.log(index + " " + colorByte + " " + colorByteAltered);
+
+            index++;
         }
 
         bits += " ";
     }
 
+    var numBits = index - 1;
+    console.log(`Required ${numBits}.`);
+
     var bitsEncodedEl = document.getElementById("bits-encoded");
     bitsEncodedEl.innerHTML = bits;
+    
+    pixelmatch(sourceImageData, destImageData, diffImageData, destCanvas.width, destCanvas.height, {
+        threshold: 0,
+        includeAA: false
+    });
 
-    ctx.putImageData(imageData, 0, 0);
-
+    ctx.putImageData(destImageData, 0, 0);
+    diffCtx.putImageData(diffImageData, 0, 0);    
 }
