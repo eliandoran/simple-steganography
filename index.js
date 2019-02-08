@@ -49,6 +49,10 @@ function drawImage(image, data) {
         for (let i=0; i<8; i++) {
             let bit = (byte >> i & 0x1);
             bits += bit;
+
+            let colorByte = data[i];
+            let colorByteAltered = (colorByte & 0xFE) | bit;
+            console.log(colorByte + " " + colorByteAltered);
         }
 
         bits += " ";
